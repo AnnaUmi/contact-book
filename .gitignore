@@ -4,3 +4,5 @@ config
 /config
 .idea
 .idea/
+/client/build
+/client/node_modules
