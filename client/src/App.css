@@ -1,3 +1,6 @@
 .active {
   color: red;
 }
+.post-item {
+  margin-bottom: 20px;
+}

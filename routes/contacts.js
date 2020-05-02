@@ -30,12 +30,12 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { name, email, phone, type } = req.body;
+    const { name, email, title, type } = req.body;
     try {
       const newContact = new Contact({
         name,
         email,
-        phone,
+        title,
         type,
         user: req.user,
       });
@@ -52,11 +52,11 @@ router.post(
 //@desc  Update contact
 //@access Private
 router.put("/:id", auth, async (req, res) => {
-  const { name, email, phone, type } = req.body;
+  const { name, email, title, type } = req.body;
   const contactFields = {};
   if (name) contactFields.name = name;
   if (email) contactFields.email = email;
-  if (phone) contactFields.phone = phone;
+  if (title) contactFields.title = title;
   if (type) contactFields.type = type;
   try {
     let contact = await Contact.findById(req.params.id);
@@ -81,11 +81,11 @@ router.put("/:id", auth, async (req, res) => {
 //@desc  Delete contact
 //@access Private
 router.delete("/:id", auth, async (req, res) => {
-  const { name, email, phone, type } = req.body;
+  const { name, email, title, type } = req.body;
   const contactFields = {};
   if (name) contactFields.name = name;
   if (email) contactFields.email = email;
-  if (phone) contactFields.phone = phone;
+  if (title) contactFields.title = title;
   if (type) contactFields.type = type;
   try {
     let contact = await Contact.findById(req.params.id);

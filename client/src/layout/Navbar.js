@@ -10,6 +10,8 @@ const Navbar = ({ title }) => {
         Home
       </NavLink>
       <NavLink to="/about">About</NavLink>
+      <NavLink to="/register">Register</NavLink>
+      <NavLink to="/login">Login</NavLink>
     </div>
   );
 };
