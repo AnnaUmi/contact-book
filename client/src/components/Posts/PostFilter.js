@@ -11,9 +11,7 @@ const PostFilter = () => {
     if (filtered === null) {
       text.current.value = "";
     }
-  }, postContext);
-
-  console.log("text", text.current.value);
+  }, []);
 
   const onChange = (e) => {
     if (text.current.value !== "") {

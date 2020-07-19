@@ -1,9 +1,18 @@
 const express = require("express");
 const connectDB = require("./config/db");
+const cors = require("cors");
 
 const app = express();
 
 connectDB();
+
+app.use(
+  cors({
+    credentials: true,
+    origin: ["http://localhost:3000"],
+    optionsSuccessStatus: 200,
+  })
+);
 
 // Init middleware
 app.use(express.json({ extended: false }));

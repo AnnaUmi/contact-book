@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import PostContext from "../context/post/postContext";
+import PostContext from "../../context/post/postContext";
 
 const PostForm = () => {
   const postContext = useContext(PostContext);
@@ -52,6 +52,7 @@ const PostForm = () => {
         <textarea
           name="text"
           value={text}
+          type="text"
           placeholder="Post"
           onChange={onChange}
         />
@@ -63,7 +64,7 @@ const PostForm = () => {
           checked={type === "JavaScript"}
           onChange={onChange}
         />
-        <label forHtml="JavaScript">JavaScript</label>
+        <label forhtml="JavaScript">JavaScript</label>
         <input
           type="radio"
           name="type"
@@ -72,7 +73,7 @@ const PostForm = () => {
           checked={type === "React"}
           onChange={onChange}
         />
-        <label forHtml="React">React</label>
+        <label forhtml="React">React</label>
         <button>{current ? "Update post" : "Add post"}</button>
         {current && <button onClick={clearAll}>Clear</button>}
       </form>

@@ -4,3 +4,6 @@
 .post-item {
   margin-bottom: 20px;
 }
+.alert-danger {
+  color: green;
+}

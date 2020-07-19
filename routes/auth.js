@@ -41,11 +41,11 @@ router.post(
     try {
       let user = await User.findOne({ email });
       if (!user) {
-        return res.status(400).json({ msg: "User email does not exist" });
+        return res.status(400).json({ msg: "Invalid credentials" });
       }
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
-        return res.status(400).json({ msg: "Password does not matched" });
+        return res.status(400).json({ msg: "Invalid credentials" });
       }
       const payload = {
         id: user.id, // only want to sent user it and with this id we can asses all content of this uset
@@ -55,7 +55,7 @@ router.post(
         payload,
         config.get("jwtSecret"),
         {
-          expiresIn: 50000,
+          expiresIn: 500000,
         },
         (err, token) => {
           if (err) throw err;

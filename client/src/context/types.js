@@ -15,3 +15,6 @@ export const LOGOUT = "LOGOUT";
 export const CLEAR_ERRORS = "CLEAR_ERRORS";
 export const USER_LOADED = "USER_LOADED";
 export const AUTH_ERROR = "AUTH_ERROR";
+export const POST_ERROR = "POST_ERROR";
+export const GET_POSTS = "GET_POSTS";
+export const CLEAR_POSTS = "CLEAR_POSTS";

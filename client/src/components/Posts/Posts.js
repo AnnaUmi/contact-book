@@ -1,22 +1,28 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import PostContext from "../../context/post/postContext";
 import PostItem from "./PostItem";
-import PostForm from "../PostForm";
+
 import PostFilter from "./PostFilter";
+import Spinner from "../../layout/Spinner";
 
 const Posts = () => {
   const postContext = useContext(PostContext);
-  const { posts, filtered } = postContext;
-  if (posts.length === 0) {
-    return <div>Please add post</div>;
-  }
+  const { posts, filtered, getPosts, loading } = postContext;
+  useEffect(() => {
+    getPosts();
+  }, []);
+  // if (posts.length === 0) {
+  //   return <Spinner />;
+  // }
+
+  if (posts === null && loading) return <Spinner />;
   return (
     <div>
       <PostFilter />
-      <PostForm />
       {filtered !== null
-        ? filtered.map((post) => <PostItem key={post.id} post={post} />)
-        : posts.map((post) => <PostItem key={post.id} post={post} />)}
+        ? filtered &&
+          filtered.map((post) => <PostItem key={post._id} post={post} />)
+        : posts && posts.map((post) => <PostItem key={post._id} post={post} />)}
     </div>
   );
 };

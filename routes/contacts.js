@@ -9,9 +9,9 @@ const Contact = require("../models/Contact");
 //@route GET api/contacts
 //@desc  Get all users contacts
 //@access Public
-router.get("/", auth, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
-    const contacts = await Contact.find({ user: req.user }).sort({ date: -1 });
+    const contacts = await Contact.find().sort({ date: -1 });
     res.json(contacts);
   } catch (err) {
     console.error(err.message);
@@ -24,17 +24,16 @@ router.get("/", auth, async (req, res) => {
 //@access Private
 router.post(
   "/",
-  [auth, [check("name", "Name is required").not().isEmpty()]],
+  [auth, check("text", "Text is required").not().isEmpty()],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { name, email, title, type } = req.body;
+    const { text, email, title, type } = req.body;
     try {
       const newContact = new Contact({
-        name,
-        email,
+        text,
         title,
         type,
         user: req.user,
@@ -43,7 +42,7 @@ router.post(
       res.json(contact);
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server Error");
+      res.status(500).send("Server Error--");
     }
   }
 );
@@ -52,10 +51,10 @@ router.post(
 //@desc  Update contact
 //@access Private
 router.put("/:id", auth, async (req, res) => {
-  const { name, email, title, type } = req.body;
+  const { name, text, title, type } = req.body;
   const contactFields = {};
   if (name) contactFields.name = name;
-  if (email) contactFields.email = email;
+  if (text) contactFields.text = text;
   if (title) contactFields.title = title;
   if (type) contactFields.type = type;
   try {

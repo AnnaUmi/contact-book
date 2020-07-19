@@ -1,5 +1,5 @@
 import React, { useReducer } from "react";
-import { v1 as uuidv1 } from "uuid";
+import axios from "axios";
 import PostContext from "./postContext";
 import postReducer from "./postReducer";
 import {
@@ -10,55 +10,88 @@ import {
   UPDATE_POST,
   FILTER_POSTS,
   CLEAR_FILTER,
+  POST_ERROR,
+  GET_POSTS,
+  CLEAR_POSTS,
 } from "../types";
 
 const PostState = (props) => {
   const initialState = {
-    posts: [
-      {
-        id: 1,
-        text: "Lala",
-        email: "lala",
-        title: "ksks",
-        type: "personal",
-        date: "12.12",
-      },
-      {
-        id: 2,
-        text: "2Lala",
-        email: "2lala",
-        title: "2ksks",
-        type: "2personal",
-        date: "12.12",
-      },
-      {
-        id: 3,
-        text: "3Lala",
-        email: "3lala",
-        title: "3ksks",
-        type: "3personal",
-        date: "12.12",
-      },
-    ],
+    posts: [],
     current: null,
     filtered: null,
+    error: null,
   };
   const [state, dispatch] = useReducer(postReducer, initialState);
-  const addPost = (post) => {
-    post.id = uuidv1();
-    dispatch({ type: ADD_POST, payload: post });
+
+  const getPosts = async () => {
+    try {
+      const res = await axios.get(`/api/contacts`);
+      dispatch({
+        type: GET_POSTS,
+        payload: res.data,
+      });
+    } catch (err) {
+      dispatch({
+        type: POST_ERROR,
+        payload: err.response.message,
+      });
+    }
   };
-  const deletePost = (id) => {
-    dispatch({ type: DELETE_POST, payload: id });
+  const addPost = async (post) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    try {
+      const res = await axios.post(`/api/contacts`, post, config);
+      dispatch({ type: ADD_POST, payload: res.data });
+    } catch (err) {
+      dispatch({
+        type: POST_ERROR,
+        payload: err.response.msg,
+      });
+    }
+  };
+  const clearPosts = () => {
+    dispatch({ type: CLEAR_POSTS });
+  };
+
+  const deletePost = async (id) => {
+    try {
+      await axios.delete(`/api/contacts/${id}`);
+      dispatch({ type: DELETE_POST, payload: id });
+    } catch (err) {
+      dispatch({
+        type: POST_ERROR,
+        payload: err.response.msg,
+      });
+    }
+  };
+  const updatePost = async (post) => {
+    console.log("ppp", post);
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    try {
+      const res = await axios.put(`/api/contacts/${post._id}`, post, config);
+      console.log("res", res);
+      dispatch({ type: UPDATE_POST, payload: res.data });
+    } catch (err) {
+      dispatch({
+        type: POST_ERROR,
+        payload: err.response.msg,
+      });
+    }
   };
   const setCurrent = (post) => {
     dispatch({ type: SET_CURRENT, payload: post });
   };
   const clearCurrent = () => {
     dispatch({ type: CLEAR_CURRENT });
-  };
-  const updatePost = (post) => {
-    dispatch({ type: UPDATE_POST, payload: post });
   };
   const filterPost = (text) => {
     dispatch({ type: FILTER_POSTS, payload: text });
@@ -72,6 +105,7 @@ const PostState = (props) => {
         posts: state.posts,
         current: state.current,
         filtered: state.filtered,
+        error: state.error,
         setCurrent,
         clearCurrent,
         addPost,
@@ -79,6 +113,8 @@ const PostState = (props) => {
         updatePost,
         filterPost,
         clearFilter,
+        getPosts,
+        clearPosts,
       }}
     >
       {props.children}
